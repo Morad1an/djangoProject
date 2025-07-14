@@ -1,0 +1,91 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Топ-10 цитат{% endblock %}
+
+{% block content %}
+<style>
+    .quotes-container {
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 15px;
+        max-width: 90%;
+        width: 800px;
+        margin: 1.5rem auto;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(75, 63, 114, 0.1);
+        border-left: 5px solid #a29bfe;
+    }
+    .quotes-container h1 {
+        font-size: 2rem;
+        color: #4b3f72;
+        margin-bottom: 1rem;
+    }
+    .back-link {
+        display: block;
+        text-align: left;
+        margin-bottom: 1rem;
+        font-size: 1rem;
+        color: #a29bfe;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .back-link:hover {
+        text-decoration: underline;
+    }
+    .quote-item {
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        border-bottom: 1px solid #e6e6fa;
+    }
+    .quote-text {
+        font-size: 1.5rem;
+        font-style: italic;
+        line-height: 1.5;
+        color: #2f2f4f;
+        margin-bottom: 0.5rem;
+    }
+    .quote-source {
+        font-size: 1rem;
+        color: #6c757d;
+        font-weight: 400;
+        margin-bottom: 0.5rem;
+    }
+    .quote-stats {
+        font-size: 0.9rem;
+        color: #ff9f43;
+        font-weight: 500;
+    }
+    @media (max-width: 600px) {
+        .quotes-container {
+            padding: 1rem;
+            margin: 0.75rem;
+        }
+        .quotes-container h1 {
+            font-size: 1.8rem;
+        }
+        .quote-text {
+            font-size: 1.3rem;
+        }
+        .back-link {
+            font-size: 0.9rem;
+        }
+    }
+</style>
+<div class="quotes-container">
+    <a class="back-link" href="{% url 'home' %}">Вернуться к цитатам</a>
+    <h1>Топ-10 самых популярных цитат</h1>
+    {% if quotes %}
+        {% for quote in quotes %}
+            <div class="quote-item">
+                <div class="quote-text">"{{ quote.text }}"</div>
+                <div class="quote-source">— {{ quote.source }}</div>
+                <div class="quote-stats">
+                    Популярность: {{ quote.popularity }} (Лайков: {{ quote.likes }} | Дизлайков: {{ quote.dislikes }} | Просмотров: {{ quote.views }})
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <div class="quote-item">Нет цитат для отображения</div>
+    {% endif %}
+</div>
+{% endblock %}

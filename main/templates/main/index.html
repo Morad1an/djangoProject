@@ -1,0 +1,149 @@
+{% extends 'main/base.html' %}
+
+{% block title %}Случайная цитата{% endblock %}
+
+{% block content %}
+<style>
+    .quote-container {
+        background: #ffffff;
+        padding: 2rem;
+        border-radius: 15px;
+        max-width: 90%;
+        width: 700px;
+        margin: 1.5rem auto;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(75, 63, 114, 0.1);
+        border-left: 5px solid #a29bfe;
+    }
+    .quote-text {
+        font-size: 1.7rem;
+        font-style: italic;
+        line-height: 1.5;
+        color: #2f2f4f;
+        margin-bottom: 1rem;
+    }
+    .quote-source {
+        font-size: 1.1rem;
+        color: #6c757d;
+        font-weight: 400;
+        margin-bottom: 1rem;
+    }
+    .counter {
+        font-size: 1rem;
+        color: #ff9f43;
+        margin-bottom: 1rem;
+        font-weight: 500;
+    }
+    .button-container {
+        display: flex;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+    .like-button {
+        background: #55efc4;
+        color: #2f2f4f;
+    }
+    .dislike-button {
+        background: #ff7675;
+        color: #2f2f4f;
+    }
+    .add-quote-button {
+        background: #a29bfe;
+        color: #ffffff;
+        margin: 1rem 0;
+        padding: 0.9rem 1.8rem;
+    }
+    .extra-info {
+        max-width: 90%;
+        width: 700px;
+        margin: 1rem auto;
+        text-align: center;
+        font-size: 1rem;
+        color: #6c757d;
+        line-height: 1.6;
+    }
+    .inspiration-section {
+        max-width: 90%;
+        width: 700px;
+        margin: 1rem auto;
+        padding: 1rem;
+        background: #f5f3ff;
+        border-radius: 10px;
+        text-align: center;
+        font-size: 0.9rem;
+        color: #4b3f72;
+    }
+    .success-message {
+        font-size: 1rem;
+        color: #4b3f72;
+        margin-bottom: 1rem;
+        font-weight: 500;
+        text-align: center;
+        border: 2px solid #a29bfe;
+        padding: 0.8rem;
+        border-radius: 8px;
+        background: #f5f3ff;
+        max-width: 90%;
+        width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    @media (max-width: 600px) {
+        .quote-container {
+            padding: 1rem;
+            margin: 0.75rem;
+        }
+        .quote-text {
+            font-size: 1.4rem;
+        }
+        .add-quote-button {
+            padding: 0.75rem 1.5rem;
+        }
+        .success-message {
+            padding: 0.6rem;
+            font-size: 0.9rem;
+            margin: 0.75rem;
+        }
+    }
+</style>
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'success' %}
+            <div class="success-message">{{ message }}</div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+{% if quote %}
+<div class="quote-container">
+    <div class="quote-text">"{{ quote.text }}"</div>
+    <div class="quote-source">— {{ quote.source }}</div>
+    <div class="counter">Просмотров: {{ quote.views }}</div>
+    <div class="button-container">
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="quote_id" value="{{ quote.id }}">
+            <input type="hidden" name="action" value="like">
+            <button type="submit" class="button like-button">Лайк ({{ quote.likes }})</button>
+        </form>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="quote_id" value="{{ quote.id }}">
+            <input type="hidden" name="action" value="dislike">
+            <button type="submit" class="button dislike-button">Дизлайк ({{ quote.dislikes }})</button>
+        </form>
+    </div>
+</div>
+{% else %}
+<div class="quote-container">
+    <div class="quote-text">Нет доступных цитат</div>
+</div>
+{% endif %}
+<a href="{% url 'add' %}" class="button add-quote-button">Добавить свою цитату</a>
+<div class="extra-info">
+    <p>Каждая цитата — это искра вдохновения! Оцените её или посмотрите самые популярные по лайкам.</p>
+    <a class="nav-link" href="{% url 'top' %}">Посмотреть топ-10 цитат</a>
+</div>
+<div class="inspiration-section">
+    <p>Найдите слова, которые тронут ваше сердце. Обновляйте страницу, чтобы открыть новую цитату!</p>
+</div>
+{% endblock %}
